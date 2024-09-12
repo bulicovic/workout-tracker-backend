@@ -1,5 +1,4 @@
 name: Java CI with Gradle
-
 on:
   push:
     branches:
@@ -7,22 +6,26 @@ on:
   pull_request:
     branches:
       - '*'
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    services:
+      db:
+        image: postgres:14
+        ports:
+          - 5432:5432
+        environment:
+          POSTGRES_DB: testdb
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
     steps:
-
       - name: Check out repository
         uses: actions/checkout@v3
-
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '21'
-
       - name: Cache Gradle packages
         uses: actions/cache@v3
         with:
@@ -32,9 +35,7 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             gradle-${{ runner.os }}-
-
       - name: Build with Gradle
         run: ./gradlew build --no-daemon
-
       - name: Run tests
         run: ./gradlew test --no-daemon
