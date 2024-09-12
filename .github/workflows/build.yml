@@ -14,11 +14,11 @@ jobs:
         image: postgres:14
         ports:
           - 5432:5432
-        options: --health-cmd "pg_isready -U ${{ env.DB_USER }}" --health-interval 10s --health-timeout 5s --health-retries 5
+        options: --health-cmd "pg_isready -U ${{ vars.DB_USER }}" --health-interval 10s --health-timeout 5s --health-retries 5
         env:
-          POSTGRES_DB: ${{ env.DB_NAME }}
-          POSTGRES_USER: ${{ env.DB_USER }}
-          POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
+          POSTGRES_DB: ${{ vars.DB_NAME }}
+          POSTGRES_USER: ${{ vars.DB_USER }}
+          POSTGRES_PASSWORD: ${{ vars.DB_PASSWORD }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
